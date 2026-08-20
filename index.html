@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding Celebration of Amina & Tariq</title>
+    <!-- Google Fonts for Dreamy Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-rose: #fce8ec;
+            --deep-blush: #e8a5b2;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --text-dark: #3a3536;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #fdf6f8 0%, #f4e1e6 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Dreamy Background Floating Glows */
+        .glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(232, 165, 178, 0.2);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .glow-1 { top: -50px; left: -50px; }
+        .glow-2 { bottom: -50px; right: -50px; }
+
+        .invitation-card {
+            position: relative;
+            background: var(--white);
+            width: 100%;
+            max-width: 650px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            text-align: center;
+            z-index: 1;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* Decorative Peony Corners */
+        .peony-corner {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            opacity: 0.85;
+            pointer-events: none;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        .top-left { top: 10px; left: 10px; background-image: url('https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=300&q=80'); filter: opacity(0.3) sepia(1) hue-rotate(300deg); transform: rotate(0deg); }
+        .bottom-right { bottom: 10px; right: 10px; background-image: url('https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=300&q=80'); filter: opacity(0.3) sepia(1) hue-rotate(300deg); transform: rotate(180deg); }
+
+        /* Typography Styles */
+        .bismillah {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        .intro-text {
+            font-size: 0.95rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #7a7072;
+            margin-bottom: 15px;
+        }
+
+        .names {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: var(--deep-blush);
+            margin: 10px 0;
+            line-height: 1.1;
+        }
+
+        .ampersand {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            display: block;
+            margin: 5px 0;
+        }
+
+        .verse {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #7a7072;
+            max-width: 480px;
+            margin: 25px auto;
+            line-height: 1.6;
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background-color: var(--gold);
+            margin: 25px auto;
+        }
+
+        /* Event Details Grid */
+        .details-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .detail-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            background: var(--primary-rose);
+            border-radius: 8px;
+            border: 1px solid rgba(232, 165, 178, 0.4);
+        }
+
+        .detail-box h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .detail-box p {
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        /* Countdown Styles */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #f0d5db;
+            min-width: 65px;
+        }
+
+        .countdown-item span:first-child {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--deep-blush);
+        }
+
+        .countdown-item span:last-child {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* Action Button */
+        .rsvp-btn {
+            background: linear-gradient(135deg, var(--gold) 0%, #c59b27 100%);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+            margin-top: 15px;
+        }
+
+        .rsvp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Modal Popup for RSVP */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-content h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--deep-blush);
+            margin-bottom: 15px;
+        }
+
+        .modal-content input, .modal-content select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #888;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .invitation-card { padding: 30px 20px; }
+            .names { font-size: 3.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <div class="invitation-card">
+        <!-- Corner Accents -->
+        <div class="peony-corner top-left"></div>
+        <div class="peony-corner bottom-right"></div>
+
+        <!-- Bismillah / Header -->
+        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+        
+        <div class="intro-text">Together with their families</div>
+        
+        <h1 class="names">
+            Amina
+            <span class="ampersand">&</span>
+            Tariq
+        </h1>
+
+        <p class="verse">
+            "And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy." <br>— Surah Ar-Rum 30:21
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="intro-text" style="font-size: 0.85rem; margin-bottom: 5px;">Joyfully invite you to celebrate their Nikah</div>
+
+        <!-- Event Details -->
+        <div class="details-container">
+            <div class="detail-box">
+                <h3>The Nikah</h3>
+                <p>Saturday, October 10, 2026<br>3:00 PM<br>The Grand Mosque & Gardens</p>
+            </div>
+            <div class="detail-box">
+                <h3>The Reception</h3>
+                <p>Saturday, October 10, 2026<br>6:30 PM<br>The Royal Peony Ballroom</p>
+            </div>
+        </div>
+
+        <!-- Live Countdown Timer -->
+        <div class="countdown" id="countdown">
+            <div class="countdown-item"><span id="days">00</span><span>Days</span></div>
+            <div class="countdown-item"><span id="hours">00</span><span>Hours</span></div>
+            <div class="countdown-item"><span id="minutes">00</span><span>Mins</span></div>
+            <div class="countdown-item"><span id="seconds">00</span><span>Secs</span></div>
+        </div>
+
+        <button class="rsvp-btn" onclick="openModal()">RSVP Here</button>
+    </div>
+
+    <!-- RSVP Modal Popup -->
+    <div class="modal" id="rsvpModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3>Kindly Respond</h3>
+            <form onsubmit="handleRSVP(event)">
+                <input type="text" placeholder="Full Name" required>
+                <select required>
+                    <option value="" disabled selected>Will you attend?</option>
+                    <option value="yes">Joyfully Accept</option>
+                    <option value="no">Regretfully Decline</option>
+                </select>
+                <button type="submit" class="rsvp-btn" style="width: 100%; margin-top: 10px;">Submit RSVP</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Target Wedding Date: October 10, 2026 15:00:00
+        const weddingDate = new Date("October 10, 2026 15:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById("countdown").innerHTML = "<p>The wedding day has arrived!</p>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60Here is a complete, single-file wedding invitation designed specifically for a Muslim wedding. It features a dreamy aesthetic with soft blush and gold tones, delicate peony motifs, gentle floating particles, and an interactive RSVP form with a subtle Islamic greeting.
+
+Save the code below as an `.html` file (e.g., `wedding-invitation.html`) and open it in any browser.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ameena & Zayd — Wedding Invitation</title>
+    <link href="[https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500&display=swap](https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500&display=swap)" rel="stylesheet">
+    <style>
+        :root {
+            --primary-rose: #f4dcd6;
+            --deep-blush: #e2b8b0;
+            --gold: #d4af37;
+            --gold-light: #f3e5ab;
+            --text-dark: #3a3535;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfbfb 0%, #f7edec 100%);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating background petals/particles */
+        .particle {
+            position: absolute;
+            background: rgba(226, 184, 176, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        .invitation-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 50px 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Peony Corner Accents simulated with gradients/borders */
+        .floral-header {
+            font-family: 'Alex Brush', cursive;
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .bismillah {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: var(--deep-blush);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .couple-names {
+            font-family: 'Alex Brush', cursive;
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin: 20px 0;
+            line-height: 1;
+        }
+
+        .invite-text {
+            font-weight: 300;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #666;
+            max-width: 480px;
+            margin: 0 auto 30px auto;
+        }
+
+        .event-details {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 20px 0;
+        }
+
+        .detail-box h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--gold);
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .detail-box p {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        /* RSVP Section */
+        .rsvp-section {
+            margin-top: 30px;
+        }
+
+        .rsvp-btn {
+            background: linear-gradient(135deg, var(--gold) 0%, #b89728 100%);
+            color: var(--white);
+            border: none;
+            padding: 12px 35px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .rsvp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .rsvp-form {
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .rsvp-form input {
+            width: 80%;
+            max-width: 300px;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: 1px solid var(--deep-blush);
+            border-radius: 20px;
+            outline: none;
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+        }
+
+        .success-msg {
+            display: none;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Peony Decorative Stamp */
+        .peony-badge {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, var(--primary-rose) 0%, var(--deep-blush) 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            font-size: 1.5rem;
+        }
+
+        @media(max-width: 600px) {
+            .event-details {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .couple-names {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating dreamy background elements -->
+    <div class="particle" style="left: 10%; width: 15px; height: 15px; animation-duration: 8s; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 30%; width: 10px; height: 10px; animation-duration: 12s; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 70%; width: 18px; height: 18px; animation-duration: 10s; animation-delay: 1s;"></div>
+    <div class="particle" style="left: 85%; width: 12px; height: 12px; animation-duration: 14s; animation-delay: 3s;"></div>
+
+    <div class="invitation-card">
+        <div class="peony-badge">🪷</div>
+        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+        <div class="floral-header">The Wedding Celebration</div>
+        
+        <p class="invite-text">
+            Together with their families, cordially invite you to share in their joy as they celebrate their Nikah ceremony.
+        </p>
+
+        <div class="couple-names">Ameena & Zayd</div>
+
+        <div class="event-details">
+            <div class="detail-box">
+                <h3>WHEN</h3>
+                <p>
