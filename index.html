@@ -3,93 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amina & Tariq | Wedding Invitation</title>
-    <!-- Google Fonts for Dreamy Typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>Nasseebah & Shahbaz — Wedding Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f7f5f0;
+            --deep-green: #274029;
+            --sage-green: #4a6b4d;
+            --envelope-green: #314d34;
+            --accent-gold: #c5a059;
+            --text-dark: #2c352d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Envelope Screen */
+        .envelope-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            height: 700px;
+            background: var(--envelope-green);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.8s ease, opacity 0.8s ease;
+            border-radius: 4px;
+            overflow: hidden;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.05) 10%, transparent 10%);
+            background-size: 20px 20px;
+        }
+
+        .envelope-wrapper.open {
+            transform: scale(1.2);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Peony Pattern Overlay */
+        .peony-bg {
+            position: absolute;
+            inset: 0;
+            opacity: 0.15;
+            background-image: url('https://images.unsplash.com/photo-1563245372-f21724e3856d?q=80&w=600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            mix-blend-mode: overlay;
+        }
+
+        /* Wax Seal */
+        .wax-seal {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #d4af37, #aa7c11);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.4);
+            border: 3px solid #99710f;
+            z-index: 10;
+            animation: pulse 2s infinite;
+        }
+
+        .wax-seal span {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 12px 25px rgba(197,160,89,0.5); }
+            100% { transform: scale(1); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        }
+
+        .click-instruction {
+            position: absolute;
+            bottom: 40px;
+            color: #d4af37;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Invitation Container (Pages) */
+        .invitation-container {
+            position: absolute;
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background: var(--bg-color);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            opacity: 0;
+            transition: opacity 1s ease;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+
+        .invitation-container.visible {
+            display: flex;
+            opacity: 1;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            padding: 40px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(39, 64, 41, 0.08);
+            border: 1px solid #e6dec9;
+            text-align: center;
+            position: relative;
+        }
+
+        .bismillah {
+            font-size: 1.5rem;
+            color: var(--deep-green);
+            margin-bottom: 20px;
+        }
+
+        .names {
+            font-size: 2.2rem;
+            color: var(--deep-green);
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .ampersand {
+            font-style: italic;
+            color: var(--accent-gold);
+            font-size: 1.6rem;
+        }
+
+        .details-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .event-box {
+            background: #f9f8f4;
+            padding: 20px;
+            margin-top: 15px;
+            border-left: 3px solid var(--accent-gold);
+            text-align: left;
+        }
+
+        .event-box h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            color: var(--deep-green);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .event-box p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Floral corners decoration styling */
+        .floral-corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            opacity: 0.6;
+        }
+        .top-left { top: 10px; left: 10px; border-top: 2px solid var(--sage-green); border-left: 2px solid var(--sage-green); }
+        .bottom-right { bottom: 10px; right: 10px; border-bottom: 2px solid var(--sage-green); border-right: 2px solid var(--sage-green); }
+
+        .rsvp-btn {
+            background: var(--deep-green);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .rsvp-btn:hover {
+            background: var(--sage-green);
+        }
+    </style>
 </head>
 <body>
 
-    <div class="scroll-container" id="scrollContainer">
+    <!-- Envelope Opening Screen -->
+    <div class="envelope-wrapper" id="envelope" onclick="openInvitation()">
+        <div class="peony-bg"></div>
+        <div class="wax-seal">
+            <span>N & S</span>
+        </div>
+        <div class="click-instruction">Tap to Open Invitation</div>
+    </div>
+
+    <!-- Website Invitation Pages -->
+    <div class="invitation-container" id="invitation">
         
-        <!-- PAGE 1: The Envelope & Opening -->
-        <section class="page" id="page-envelope">
-            <div class="envelope-container" id="envelopeContainer">
-                <div class="envelope-back"></div>
-                <div class="envelope-flap" id="envelopeFlap"></div>
-                <div class="envelope-pocket"></div>
-                <div class="envelope-card" id="envelopeCard">
-                    <p class="envelope-sub">The Wedding Of</p>
-                    <h2 class="envelope-names">Amina & Tariq</h2>
-                    <span class="scroll-prompt">Scroll to Open ↓</span>
-                </div>
+        <!-- Page 1: Welcome & Intro -->
+        <div class="page">
+            <div class="floral-corner top-left"></div>
+            <div class="bismillah">﷽</div>
+            <p class="details-text">Mr. & Mrs. Edoo request your presence on the occasion of the wedding of their beloved children</p>
+            <h1 class="names">Nasseebah <br><span class="ampersand">&</span> <br>Shahbaz</h1>
+            <div class="floral-corner bottom-right"></div>
+        </div>
+
+        <!-- Page 2: Venue & Schedule -->
+        <div class="page">
+            <h2 style="font-family: 'Montserrat'; font-size: 1.1rem; color: var(--deep-green); letter-spacing: 2px; margin-bottom: 15px;">PROGRAMME</h2>
+            
+            <div class="event-box">
+                <h3>Nikah Ceremony</h3>
+                <p><strong>Date:</strong> 18 November 2026</p>
+                <p><strong>Time:</strong> 16:00 hrs</p>
+                <p><strong>Location:</strong> The Hills, Hall & Banquet, Ecroignard</p>
             </div>
-        </section>
 
-        <!-- PAGE 2: The Invitation Details -->
-        <section class="page">
-            <div class="content-card">
-                <div class="peony-corner top-left"></div>
-                <div class="peony-corner top-right"></div>
-                <div class="peony-corner bottom-left"></div>
-                <div class="peony-corner bottom-right"></div>
-
-                <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-                <h2>The Invitation</h2>
-                <div class="gold-divider"></div>
-                <p>Together with their families, cordially invite you to celebrate the Nikah ceremony uniting their lives in love and faith.</p>
-                <h1 class="names">Amina & Tariq</h1>
-                <p class="date-text">Saturday, October 10th, 2026</p>
+            <div class="event-box">
+                <h3>Reception & Dinner</h3>
+                <p>Dinner will be served on that occasion as from 19:00 hrs</p>
             </div>
-        </section>
+        </div>
 
-        <!-- PAGE 3: The Itinerary -->
-        <section class="page">
-            <div class="content-card">
-                <div class="peony-corner top-left"></div>
-                <div class="peony-corner top-right"></div>
-                <div class="peony-corner bottom-left"></div>
-                <div class="peony-corner bottom-right"></div>
-
-                <h2>Event Itinerary</h2>
-                <div class="gold-divider"></div>
-                
-                <div class="itinerary-list">
-                    <div class="itinerary-item">
-                        <strong>3:00 PM</strong>
-                        <p>Guest Arrival & Seating</p>
-                    </div>
-                    <div class="itinerary-item">
-                        <strong>3:30 PM</strong>
-                        <p>Nikah Ceremony</p>
-                    </div>
-                    <div class="itinerary-item">
-                        <strong>6:00 PM</strong>
-                        <p>Dinner & Reception Banquet</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PAGE 4: Clickable Location -->
-        <section class="page">
-            <div class="content-card">
-                <div class="peony-corner top-left"></div>
-                <div class="peony-corner top-right"></div>
-                <div class="peony-corner bottom-left"></div>
-                <div class="peony-corner bottom-right"></div>
-
-                <h2>Venue Location</h2>
-                <div class="gold-divider"></div>
-                <p><strong>The Grand Garden Estate</strong><br>123 Peony Blossom Way<br>Toronto, ON</p>
-                <a href="https://maps.google.com" target="_blank" class="map-btn">Open in Google Maps</a>
-                
-                <p class="return-hint">Scroll back up to close the envelope ↑</p>
-            </div>
-        </section>
+        <!-- Page 3: Duas & RSVP -->
+        <div class="page">
+            <p class="details-text" style="font-style: italic;">
+                "Your duas & esteemed presence will be highly appreciated."
+            </p>
+            <p class="details-text" style="margin-bottom: 5px;">With best compliments from</p>
+            <p style="font-weight: 600; color: var(--deep-green); letter-spacing: 1px;">Edoo Family</p>
+            
+            <button class="rsvp-btn" onclick="alert('Thank you! Your response has been noted.')">Confirm Attendance</button>
+        </div>
 
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        function openInvitation() {
+            const envelope = document.getElementById('envelope');
+            const invitation = document.getElementById('invitation');
+
+            envelope.classList.add('open');
+            
+            setTimeout(() => {
+                envelope.style.display = 'none';
+                invitation.classList.add('visible');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 700);
+        }
+    </script>
 </body>
 </html>
