@@ -1,0 +1,533 @@
+/* =========================================================
+   TOKENS
+========================================================= */
+:root{
+  --cream:        #F6F1E4;
+  --cream-deep:   #EDE4CC;
+  --cream-paper:  #FBF8EF;
+  --green-deep:   #1F3A2E;
+  --green:        #2F5233;
+  --green-soft:   #4C7A5A;
+  --green-mist:   #7FA487;
+  --gold:         #B8933F;
+  --gold-light:   #D8BC79;
+  --blush:        #C97B84;
+  --blush-deep:   #A8515F;
+  --ink:          #24301F;
+
+  --font-display: 'Cormorant Garamond', serif;
+  --font-script:  'Mrs Saint Delafield', cursive;
+  --font-utility: 'Jost', sans-serif;
+
+  --ease-silk: cubic-bezier(.22,.61,.36,1);
+
+  /* hand-drawn line-art ornaments, tinted to the palette */
+  --peony-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%23A8515F' stroke-width='1.4' stroke-linecap='round'%3E%3Cpath d='M60 60 C48 46 46 30 60 20 C74 30 72 46 60 60Z'/%3E%3Cpath d='M60 60 C74 50 90 50 98 62 C90 74 74 74 60 60Z'/%3E%3Cpath d='M60 60 C70 74 68 90 56 98 C44 90 46 74 60 60Z'/%3E%3Cpath d='M60 60 C46 68 30 66 22 54 C30 42 46 44 60 60Z'/%3E%3Cpath d='M60 60 C50 48 34 46 24 34' opacity='.5'/%3E%3Ccircle cx='60' cy='60' r='7' stroke='%23B8933F'/%3E%3C/g%3E%3Cg fill='none' stroke='%232F5233' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M60 74 C56 92 46 100 34 104'/%3E%3Cpath d='M46 90 C40 88 36 90 32 96'/%3E%3C/g%3E%3C/svg%3E");
+  --butterfly-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 90'%3E%3Cg fill='none' stroke='%232F5233' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M60 20 C60 20 46 2 30 8 C16 14 18 34 34 40 C48 45 60 34 60 34'/%3E%3Cpath d='M60 20 C60 20 74 2 90 8 C104 14 102 34 86 40 C72 45 60 34 60 34'/%3E%3Cpath d='M60 34 C60 34 50 46 38 48 C26 50 22 64 34 70 C46 76 58 62 60 48'/%3E%3Cpath d='M60 34 C60 34 70 46 82 48 C94 50 98 64 86 70 C74 76 62 62 60 48'/%3E%3Cline x1='60' y1='14' x2='60' y2='58'/%3E%3Cpath d='M60 16 C57 10 52 8 48 10' /%3E%3Cpath d='M60 16 C63 10 68 8 72 10'/%3E%3C/g%3E%3Ccircle cx='60' cy='16' r='2.2' fill='%23B8933F'/%3E%3C/svg%3E");
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html,body{
+  margin:0; padding:0;
+  background:var(--green-deep);
+  color:var(--ink);
+  font-family:var(--font-display);
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior:none;
+}
+
+html.is-locked,
+body.is-locked{ overflow:hidden; height:100vh; touch-action:none; overscroll-behavior:none; }
+
+h1,h2,h3,p{ margin:0; }
+
+/* =========================================================
+   AMBIENT CANVAS — drifting petals & fireflies behind scene
+========================================================= */
+#ambient-canvas{
+  position:fixed; inset:0;
+  width:100%; height:100%;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* =========================================================
+   SCROLL TRACK / STAGE
+========================================================= */
+.scroll-track{
+  position:relative;
+  height:720vh;
+  z-index:1;
+}
+
+.stage{
+  position:sticky;
+  top:0; left:0;
+  width:100%; height:100vh;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.backdrop{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(120% 90% at 50% 12%, rgba(216,188,121,.16), transparent 55%),
+    radial-gradient(140% 120% at 50% 100%, var(--green) 0%, var(--green-deep) 60%, #142720 100%);
+  z-index:0;
+}
+
+/* =========================================================
+   PRE-OPEN COPY
+========================================================= */
+.tap-hint,
+.scroll-hint{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:9%;
+  font-family:var(--font-utility);
+  font-size:.72rem;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--cream-deep);
+  opacity:.85;
+  z-index:5;
+  text-align:center;
+}
+
+.tap-hint{ animation:pulseHint 2.4s ease-in-out infinite; }
+.scroll-hint{ opacity:0; transition:opacity .6s var(--ease-silk); pointer-events:none; }
+.scroll-hint.is-visible{ opacity:.85; }
+.scroll-hint__arrow{ display:block; font-size:1rem; animation:bob 1.6s ease-in-out infinite; margin-bottom:.35em; }
+
+@keyframes pulseHint{ 0%,100%{opacity:.55;} 50%{opacity:1;} }
+@keyframes bob{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+
+/* =========================================================
+   ENVELOPE SCENE
+========================================================= */
+.envelope-scene{
+  position:relative;
+  width:min(88vw, 420px);
+  aspect-ratio:3 / 2;
+  perspective:1600px;
+  z-index:2;
+}
+
+.env-back{
+  position:absolute; inset:0;
+  background:linear-gradient(155deg, var(--cream) 0%, var(--cream-deep) 100%);
+  border-radius:6px;
+  box-shadow:
+    0 30px 60px -20px rgba(10,20,14,.55),
+    0 4px 0 rgba(184,147,63,.4) inset;
+  overflow:hidden;
+}
+
+.env-back::before,
+.env-back::after{
+  /* side + bottom flap creases drawn in */
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(65deg, transparent 49.6%, rgba(31,58,46,.13) 50%, transparent 50.4%),
+    linear-gradient(-65deg, transparent 49.6%, rgba(31,58,46,.13) 50%, transparent 50.4%);
+  opacity:.9;
+}
+
+.env-back__pattern{
+  position:absolute; inset:0;
+  opacity:.35;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='none' stroke='%23B8933F' stroke-width='.6'%3E%3Cpath d='M32 4 L58 32 L32 60 L6 32 Z'/%3E%3Ccircle cx='32' cy='32' r='9'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:64px 64px;
+}
+
+/* ---- letter ---- */
+.letter{
+  position:absolute;
+  left:50%;
+  top:52%;
+  width:88%;
+  height:150%;
+  transform:translate(-50%,10%) scale(.55);
+  transform-origin:50% 100%;
+  border-radius:4px;
+  background:var(--cream-paper);
+  box-shadow:0 20px 50px -18px rgba(10,20,14,.5);
+  overflow:hidden;
+  z-index:3;
+  will-change:transform;
+}
+
+.letter__frame{
+  position:absolute; inset:14px;
+  border:1px solid rgba(184,147,63,.55);
+  pointer-events:none;
+  z-index:2;
+}
+.letter__frame::before{
+  content:"";
+  position:absolute; inset:5px;
+  border:1px solid rgba(184,147,63,.28);
+}
+
+.letter__scroller{
+  position:relative;
+  z-index:1;
+  width:100%; height:100%;
+  overflow:hidden;
+  padding:14% 11% 10%;
+  display:flex;
+  flex-direction:column;
+}
+
+/* peony wash inside the letter paper */
+.letter::before{
+  content:"";
+  position:absolute; inset:0;
+  z-index:0;
+  background-image:
+    radial-gradient(closest-side, rgba(201,123,132,.16), transparent 70%),
+    radial-gradient(closest-side, rgba(201,123,132,.12), transparent 70%);
+  background-size:46% 46%, 38% 38%;
+  background-position:-6% 108%, 108% -4%;
+  background-repeat:no-repeat;
+}
+
+/* ---- flap ---- */
+.env-flap{
+  position:absolute;
+  left:0; top:0;
+  width:100%; height:56%;
+  clip-path:polygon(0 0, 100% 0, 50% 100%);
+  background:linear-gradient(200deg, var(--cream-deep) 0%, var(--cream) 100%);
+  transform-origin:50% 0%;
+  transform-style:preserve-3d;
+  box-shadow:0 2px 14px rgba(10,20,14,.25);
+  z-index:4;
+  will-change:transform;
+}
+
+.env-flap__pattern{
+  position:absolute; inset:0;
+  opacity:.4;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cg fill='none' stroke='%232F5233' stroke-width='.5'%3E%3Cpath d='M24 2 L46 24 L24 46 L2 24 Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:48px 48px;
+}
+
+/* ---- seal / stamp ---- */
+.seal{
+  position:absolute;
+  left:50%; top:38%;
+  transform:translate(-50%,-50%);
+  width:78px; height:78px;
+  border-radius:50%;
+  border:none;
+  cursor:pointer;
+  z-index:6;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px;
+  background:
+    radial-gradient(circle at 32% 28%, var(--gold-light), var(--gold) 55%, #8f6f28 100%);
+  box-shadow:
+    0 8px 18px -6px rgba(10,20,14,.55),
+    inset 0 2px 3px rgba(255,255,255,.45),
+    inset 0 -6px 10px rgba(0,0,0,.25);
+  color:var(--cream-paper);
+  transition:transform .5s var(--ease-silk), opacity .6s var(--ease-silk), box-shadow .4s;
+  will-change:transform, opacity;
+}
+
+.seal:hover{ transform:translate(-50%,-50%) scale(1.05); }
+.seal:active{ transform:translate(-50%,-50%) scale(.94); }
+
+.seal__glow{
+  position:absolute; inset:-14px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(216,188,121,.55), transparent 70%);
+  opacity:0;
+  pointer-events:none;
+}
+
+.seal__crescent{ width:20px; height:20px; fill:var(--cream-paper); opacity:.92; }
+.seal__initials{ font-family:var(--font-utility); font-size:.56rem; letter-spacing:.06em; }
+
+.seal.is-popped{
+  animation:sealPop .7s var(--ease-silk) forwards;
+}
+.seal.is-popped .seal__glow{ animation:sealGlow .9s ease-out forwards; }
+
+@keyframes sealPop{
+  0%{ transform:translate(-50%,-50%) scale(1); }
+  35%{ transform:translate(-50%,-50%) scale(1.35); }
+  60%{ transform:translate(-50%,-50%) scale(.85); }
+  100%{ transform:translate(-50%,-50%) scale(1); }
+}
+@keyframes sealGlow{
+  0%{ opacity:0; transform:scale(.4); }
+  40%{ opacity:1; }
+  100%{ opacity:0; transform:scale(2.6); }
+}
+
+body.is-open .seal{
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,-50%) scale(.4);
+}
+
+/* =========================================================
+   SPARKLE BURST (JS-spawned particles on tap)
+========================================================= */
+.sparkle-layer{
+  position:fixed; inset:0;
+  z-index:50;
+  pointer-events:none;
+}
+
+.spark{
+  position:absolute;
+  border-radius:50%;
+  background:var(--gold-light);
+  box-shadow:0 0 6px 1px rgba(216,188,121,.8);
+  opacity:0;
+  animation-name:sparkFly;
+  animation-timing-function:cubic-bezier(.16,.84,.44,1);
+  animation-fill-mode:forwards;
+}
+.spark.is-crescent{
+  background:none;
+  box-shadow:none;
+  color:var(--gold-light);
+  font-size:14px;
+  line-height:1;
+}
+.spark.is-petal{
+  background:var(--blush);
+  border-radius:0 60% 0 60%;
+}
+
+@keyframes sparkFly{
+  0%{ opacity:0; transform:translate(0,0) scale(.2) rotate(0deg); }
+  12%{ opacity:1; }
+  100%{ opacity:0; transform:var(--spark-end) scale(1) rotate(var(--spark-rot,180deg)); }
+}
+
+/* =========================================================
+   LEAVES (content sections inside the letter)
+========================================================= */
+.leaf{
+  position:absolute;
+  left:11%; right:11%;
+  top:50%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:.6em;
+  opacity:0;
+  transform:translateY(-50%);
+  will-change:opacity, transform;
+}
+
+.crescent{
+  width:26px; height:26px;
+  fill:var(--gold);
+  opacity:.85;
+}
+.crescent--small{ width:20px; height:20px; }
+
+.bismillah{
+  font-size:clamp(1.3rem,4.4vw,1.7rem);
+  color:var(--green-deep);
+  font-weight:500;
+}
+.bismillah-translit{
+  font-family:var(--font-utility);
+  font-size:.68rem;
+  letter-spacing:.12em;
+  color:var(--green-soft);
+  text-transform:uppercase;
+  max-width:22em;
+}
+
+.eyebrow{
+  font-family:var(--font-script);
+  font-size:clamp(1.4rem,5vw,1.9rem);
+  color:var(--blush-deep);
+}
+
+.names{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  justify-content:center;
+  gap:.28em;
+  font-weight:500;
+  font-size:clamp(2.1rem,9vw,3.4rem);
+  color:var(--green-deep);
+  line-height:1.05;
+}
+.names__and{
+  font-family:var(--font-script);
+  font-size:.62em;
+  color:var(--gold);
+  padding:0 .05em;
+}
+.names--static{ font-size:clamp(2rem,7vw,2.8rem); }
+
+.script-line{
+  font-family:var(--font-script);
+  font-size:clamp(1.3rem,4.6vw,1.7rem);
+  color:var(--green-soft);
+}
+.script-line--big{ font-size:clamp(1.6rem,6vw,2.2rem); }
+
+.message{
+  font-size:clamp(1rem,3.6vw,1.25rem);
+  line-height:1.65;
+  color:var(--ink);
+  max-width:26em;
+  font-style:italic;
+}
+
+.detail-eyebrow{
+  font-family:var(--font-utility);
+  font-size:.72rem;
+  letter-spacing:.26em;
+  text-transform:uppercase;
+  color:var(--gold);
+}
+.detail-headline{
+  font-size:clamp(1.7rem,6.4vw,2.3rem);
+  color:var(--green-deep);
+  font-weight:500;
+}
+.detail-sub{
+  font-family:var(--font-utility);
+  font-size:.82rem;
+  color:var(--green-soft);
+  letter-spacing:.03em;
+}
+
+.date-block{
+  display:flex;
+  align-items:center;
+  gap:.5em;
+}
+.date-block__day{
+  font-size:clamp(3.2rem,14vw,4.6rem);
+  line-height:1;
+  color:var(--green-deep);
+  font-weight:500;
+}
+.date-block__mid{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  text-align:left;
+}
+.date-block__weekday{
+  font-family:var(--font-utility);
+  font-size:.72rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--green-soft);
+}
+.date-block__month{
+  font-size:1.4rem;
+  color:var(--green-deep);
+}
+.date-block__year{
+  font-size:clamp(1.6rem,6vw,2rem);
+  color:var(--gold);
+  align-self:flex-end;
+}
+
+.venue-link{
+  font-family:var(--font-utility);
+  font-size:.78rem;
+  letter-spacing:.08em;
+  color:var(--blush-deep);
+  text-decoration:none;
+  border-bottom:1px solid rgba(168,81,95,.4);
+  padding-bottom:2px;
+  margin-top:.2em;
+}
+.venue-link:hover{ color:var(--green-deep); border-color:var(--green-deep); }
+
+.signature{
+  font-size:clamp(1.6rem,6vw,2.1rem);
+  color:var(--green-deep);
+}
+
+/* corner peony + butterfly ornaments on the letter */
+.letter__scroller::before,
+.letter__scroller::after{
+  content:"";
+  position:absolute;
+  width:64px; height:64px;
+  background-repeat:no-repeat;
+  background-size:contain;
+  opacity:.9;
+  z-index:2;
+  pointer-events:none;
+}
+.letter__scroller::before{
+  top:6%; left:4%;
+  background-image:var(--peony-svg);
+}
+.letter__scroller::after{
+  bottom:6%; right:5%;
+  background-image:var(--butterfly-svg);
+  width:46px; height:46px;
+}
+
+/* =========================================================
+   REDUCED MOTION FALLBACK (static card)
+========================================================= */
+.reduced-motion-fallback{
+  position:fixed; inset:0;
+  z-index:100;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:6vw;
+  background:
+    radial-gradient(140% 120% at 50% 100%, var(--green) 0%, var(--green-deep) 60%, #142720 100%);
+}
+.reduced-fallback__card{
+  background:var(--cream-paper);
+  border:1px solid rgba(184,147,63,.5);
+  border-radius:8px;
+  max-width:420px;
+  padding:12vw 8vw;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:1em;
+  box-shadow:0 20px 50px -18px rgba(10,20,14,.5);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .scroll-track{ display:none; }
+  #ambient-canvas{ display:none; }
+  .reduced-motion-fallback{ display:flex !important; }
+  body.is-locked{ overflow:auto; height:auto; touch-action:auto; }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width:420px){
+  .envelope-scene{ width:92vw; }
+  .seal{ width:66px; height:66px; }
+}
+
+@media (min-width:900px){
+  .envelope-scene{ width:min(46vw, 480px); }
+}
