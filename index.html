@@ -4,154 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amina & Tariq | Wedding Invitation</title>
+    <!-- Google Fonts for Dreamy Typography -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        /* Mobile-First Reset */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: 'Montserrat', sans-serif; 
-            background-color: #1a3320; /* Deep Green Background */
-            color: #333; 
-            overflow-x: hidden; 
-            height: 100vh;
-        }
-
-        .scroll-container { 
-            height: 100vh; 
-            overflow-y: scroll; 
-            scroll-snap-type: y mandatory; 
-            scroll-behavior: smooth; 
-        }
-
-        /* The "Phone" Viewport */
-        .page { 
-            height: 100vh; 
-            width: 100%; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            position: relative; 
-            scroll-snap-align: start; 
-            background: #fdfaf6; /* Creamy Paper */
-        }
-
-        /* 1. Envelope Opening (Page 1) */
-        #page-envelope { background: #1a3320; }
-        
-        .envelope {
-            position: relative;
-            width: 300px;
-            height: 200px;
-            background: #2d5a37;
-            border: 2px solid #d4af37;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.8s ease;
-        }
-
-        .envelope-flap {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            height: 100px;
-            background: #1a3320;
-            clip-path: polygon(0 0, 100% 0, 50% 100%);
-            transition: transform 0.8s ease;
-            transform-origin: top;
-            z-index: 10;
-        }
-
-        .invite-card-peek {
-            position: absolute;
-            width: 280px;
-            height: 180px;
-            background: white;
-            transition: transform 0.8s ease;
-            z-index: 5;
-            text-align: center;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        /* Trigger Animation on Scroll */
-        .scrolled .envelope-flap { transform: rotateX(180deg); }
-        .scrolled .invite-card-peek { transform: translateY(-150px); }
-
-        /* 2, 3, 4. Invitation Pages */
-        .content {
-            padding: 40px;
-            text-align: center;
-            width: 100%;
-            border: 1px solid #d4af37;
-            margin: 20px;
-        }
-
-        h1 { font-family: 'Great Vibes', cursive; color: #1a3320; font-size: 3rem; }
-        h2 { font-family: 'Cinzel', serif; color: #d4af37; letter-spacing: 2px; text-transform: uppercase; }
-        .gold-line { height: 1px; width: 50px; background: #d4af37; margin: 20px auto; }
-        .map-btn { display: inline-block; padding: 15px 30px; background: #1a3320; color: white; text-decoration: none; border-radius: 5px; margin-top: 20px; font-family: 'Cinzel', serif; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="scroll-container" id="scrollContainer">
-    <!-- Envelope Page -->
-    <section class="page" id="page-envelope">
-        <div class="envelope" id="env">
-            <div class="envelope-flap"></div>
-            <div class="invite-card-peek">
-                <p>Wedding Invitation</p>
-                <h1 style="font-size: 2rem;">Amina & Tariq</h1>
+    <div class="scroll-container" id="scrollContainer">
+        
+        <!-- PAGE 1: The Envelope & Opening -->
+        <section class="page" id="page-envelope">
+            <div class="envelope-container" id="envelopeContainer">
+                <div class="envelope-back"></div>
+                <div class="envelope-flap" id="envelopeFlap"></div>
+                <div class="envelope-pocket"></div>
+                <div class="envelope-card" id="envelopeCard">
+                    <p class="envelope-sub">The Wedding Of</p>
+                    <h2 class="envelope-names">Amina & Tariq</h2>
+                    <span class="scroll-prompt">Scroll to Open ↓</span>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Page 2: Invitation -->
-    <section class="page">
-        <div class="content">
-            <h2>The Wedding</h2>
-            <div class="gold-line"></div>
-            <p>Together with their families,<br>we invite you to join us.</p>
-            <h1>Amina & Tariq</h1>
-        </div>
-    </section>
+        <!-- PAGE 2: The Invitation Details -->
+        <section class="page">
+            <div class="content-card">
+                <div class="peony-corner top-left"></div>
+                <div class="peony-corner top-right"></div>
+                <div class="peony-corner bottom-left"></div>
+                <div class="peony-corner bottom-right"></div>
 
-    <!-- Page 3: Itinerary -->
-    <section class="page">
-        <div class="content">
-            <h2>Itinerary</h2>
-            <div class="gold-line"></div>
-            <p><strong>3:00 PM:</strong> Nikah Ceremony</p>
-            <p><strong>6:00 PM:</strong> Reception</p>
-        </div>
-    </section>
+                <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+                <h2>The Invitation</h2>
+                <div class="gold-divider"></div>
+                <p>Together with their families, cordially invite you to celebrate the Nikah ceremony uniting their lives in love and faith.</p>
+                <h1 class="names">Amina & Tariq</h1>
+                <p class="date-text">Saturday, October 10th, 2026</p>
+            </div>
+        </section>
 
-    <!-- Page 4: Location -->
-    <section class="page">
-        <div class="content">
-            <h2>Venue</h2>
-            <div class="gold-line"></div>
-            <p>The Grand Garden Estate<br>Toronto, ON</p>
-            <a href="https://maps.google.com" class="map-btn">Get Directions</a>
-        </div>
-    </section>
-</div>
+        <!-- PAGE 3: The Itinerary -->
+        <section class="page">
+            <div class="content-card">
+                <div class="peony-corner top-left"></div>
+                <div class="peony-corner top-right"></div>
+                <div class="peony-corner bottom-left"></div>
+                <div class="peony-corner bottom-right"></div>
 
-<script>
-    const container = document.getElementById('scrollContainer');
-    const env = document.getElementById('env');
-    
-    container.addEventListener('scroll', () => {
-        if (container.scrollTop > 100) {
-            env.classList.add('scrolled');
-        } else {
-            env.classList.remove('scrolled');
-        }
-    });
-</script>
+                <h2>Event Itinerary</h2>
+                <div class="gold-divider"></div>
+                
+                <div class="itinerary-list">
+                    <div class="itinerary-item">
+                        <strong>3:00 PM</strong>
+                        <p>Guest Arrival & Seating</p>
+                    </div>
+                    <div class="itinerary-item">
+                        <strong>3:30 PM</strong>
+                        <p>Nikah Ceremony</p>
+                    </div>
+                    <div class="itinerary-item">
+                        <strong>6:00 PM</strong>
+                        <p>Dinner & Reception Banquet</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+        <!-- PAGE 4: Clickable Location -->
+        <section class="page">
+            <div class="content-card">
+                <div class="peony-corner top-left"></div>
+                <div class="peony-corner top-right"></div>
+                <div class="peony-corner bottom-left"></div>
+                <div class="peony-corner bottom-right"></div>
+
+                <h2>Venue Location</h2>
+                <div class="gold-divider"></div>
+                <p><strong>The Grand Garden Estate</strong><br>123 Peony Blossom Way<br>Toronto, ON</p>
+                <a href="https://maps.google.com" target="_blank" class="map-btn">Open in Google Maps</a>
+                
+                <p class="return-hint">Scroll back up to close the envelope ↑</p>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
