@@ -43,7 +43,7 @@ body.is-locked{ overflow:hidden; height:100vh; touch-action:none; overscroll-beh
 h1,h2,h3,p{ margin:0; }
 
 /* =========================================================
-   AMBIENT CANVAS — drifting petals & fireflies behind scene
+   AMBIENT CANVAS â€” drifting petals & fireflies behind scene
 ========================================================= */
 #ambient-canvas{
   position:fixed; inset:0;
