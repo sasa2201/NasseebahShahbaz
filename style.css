@@ -1,0 +1,259 @@
+:root {
+    --deep-green: #1b3b22;
+    --envelope-dark: #142e1a;
+    --gold: #d4af37;
+    --gold-light: #f3e5ab;
+    --cream: #faf9f6;
+    --blush: #e2b8b0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--deep-green);
+    color: #333;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Scroll Container enabling snap behavior */
+.scroll-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    width: 100vw;
+}
+
+/* Full Screen Sections */
+.page {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    scroll-snap-align: start;
+    background: var(--cream);
+    padding: 20px;
+}
+
+#page-envelope {
+    background: var(--deep-green);
+    overflow: hidden;
+}
+
+/* Responsive Envelope Design */
+.envelope-container {
+    position: relative;
+    width: min(90vw, 400px);
+    height: min(60vw, 260px);
+    background: var(--envelope-dark);
+    border: 2px solid var(--gold);
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+/* Envelope Flap Animation */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 55%;
+    background: #183420;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    border-top: 2px solid var(--gold);
+    z-index: 30;
+}
+
+.envelope-pocket {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(20,46,26,0.9) 0%, rgba(27,59,34,1) 100%);
+    pointer-events: none;
+    border-radius: 0 0 8px 8px;
+    z-index: 20;
+}
+
+/* The Card Sliding Out */
+.envelope-card {
+    position: absolute;
+    bottom: 10px;
+    width: min(82vw, 360px);
+    height: min(52vw, 220px);
+    background: var(--cream);
+    border: 1px solid var(--gold);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.envelope-sub {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #777;
+}
+
+.envelope-names {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2.2rem, 6vw, 3rem);
+    color: var(--gold);
+    margin: 5px 0;
+}
+
+.scroll-prompt {
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--deep-green);
+    margin-top: 10px;
+    animation: pulse 1.5s infinite;
+}
+
+/* Active Open States triggered via JavaScript */
+.envelope-container.open .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.envelope-container.open .envelope-card {
+    transform: translateY(-135px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    z-index: 25;
+}
+
+/* Inner Page Content Cards */
+.content-card {
+    background: var(--cream);
+    width: min(92vw, 600px);
+    max-height: 90vh;
+    padding: clamp(30px, 5vw, 50px);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15);
+    position: relative;
+    overflow-y: auto;
+}
+
+/* Peony Watercolor Corners (Decorative graphics) */
+.peony-corner {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #f3d1dc 0%, var(--blush) 100%);
+    opacity: 0.5;
+    border-radius: 50%;
+    filter: blur(1px);
+    pointer-events: none;
+}
+.top-left { top: 12px; left: 12px; }
+.top-right { top: 12px; right: 12px; }
+.bottom-left { bottom: 12px; left: 12px; }
+.bottom-right { bottom: 12px; right: 12px; }
+
+/* Typography */
+h1, h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--deep-green);
+}
+h2 {
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+.names {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(3rem, 8vw, 4rem);
+    color: #b8860b;
+    margin: 10px 0;
+}
+.bismillah {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--gold);
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+.gold-divider {
+    height: 1px;
+    width: 70px;
+    background: var(--gold);
+    margin: 15px auto;
+}
+p {
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 10px;
+}
+.date-text {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: var(--deep-green);
+    margin-top: 10px;
+}
+
+/* Itinerary Details */
+.itinerary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+.itinerary-item strong {
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+}
+
+/* Map Button */
+.map-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold) 0%, #b89728 100%);
+    color: white;
+    padding: 12px 30px;
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    border-radius: 30px;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    transition: transform 0.3s ease;
+}
+.map-btn:hover {
+    transform: translateY(-2px);
+}
+.return-hint {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
