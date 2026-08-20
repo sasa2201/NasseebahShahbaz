@@ -7,12 +7,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f4f1e8;
+            --bg-color: #f0ece1; /* Slightly deeper parchment color for better engraving contrast */
             --deep-green: #274029;
             --sage-green: #4a6b4d;
             --envelope-green: #1d3320;
             --accent-gold: #c5a059;
             --text-dark: #2c352d;
+            /* Engraved / Letterpress text shadow effect */
+            --engraved-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8), -1px -1px 1px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -25,7 +27,6 @@
             background-color: var(--bg-color);
             font-family: 'Cormorant Garamond', serif;
             color: var(--text-dark);
-            /* Let the internal content dictate the scroll height */
         }
 
         /* Fixed layer for the envelope */
@@ -39,7 +40,7 @@
             justify-content: center;
             align-items: center;
             z-index: 100;
-            pointer-events: none; /* Allows scrolling on the body behind it */
+            pointer-events: none;
         }
 
         /* Envelope Design */
@@ -55,7 +56,7 @@
             align-items: center;
             border-radius: 4px;
             overflow: hidden;
-            pointer-events: auto; /* Catch clicks if needed */
+            pointer-events: auto;
             will-change: transform, opacity;
         }
 
@@ -63,16 +64,14 @@
         .peony-bg {
             position: absolute;
             inset: -20px;
-            background-image: url('https://images.pexels.com/photos/4622947/pexels-photo-4622947.jpeg');
+            background-image: url('https://images.unsplash.com/photo-1455382223748-18e5968d0e51?q=80&w=800&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            /* Tinting the peonies deep green to mimic embossed wax/paper */
             filter: grayscale(100%) sepia(50%) hue-rotate(70deg) contrast(1.5) brightness(0.7);
             mix-blend-mode: screen;
             opacity: 0.45;
         }
 
-        /* Inner shadow to mimic the envelope folds */
         .envelope-wrapper::after {
             content: '';
             position: absolute;
@@ -107,84 +106,68 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
-        .scroll-instruction {
-            position: absolute;
-            bottom: 40px;
-            color: #e6d3a3;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            text-align: center;
-            width: 100%;
-            z-index: 10;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-8px); }
-            60% { transform: translateY(-4px); }
-        }
-
         /* Scrolling Content Layer */
         .content-scroll-layer {
             position: relative;
-            z-index: 50; /* Sits under the closed envelope, revealed when it fades */
-            padding-top: 150vh; /* Space to scroll BEFORE the first card appears */
-            padding-bottom: 150vh; /* Space to scroll AFTER the last card to trigger the close animation */
+            z-index: 50; 
+            padding-top: 120vh; /* Scroll space to open envelope */
+            padding-bottom: 120vh; /* Scroll space to close envelope */
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 40vh; /* Large gap ensures only one card is seen at a time */
+            gap: 0; /* REMOVED GAP for seamless page transitions */
         }
 
-        /* Individual Card Aesthetics */
+        /* The Continuous Card Container */
+        .continuous-card {
+            width: 100%;
+            max-width: 450px;
+            background: #fdfaf4;
+            box-shadow: 0 20px 50px rgba(39, 64, 41, 0.2);
+            position: relative;
+            overflow: hidden; /* Contains the engraved background */
+            border-radius: 6px;
+        }
+
+        /* Engraved Floral Background spanning the whole container */
+        .engraved-floral {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1563245372-f21724e3856d?q=80&w=800&auto=format&fit=crop');
+            background-size: contain;
+            background-repeat: repeat-y;
+            opacity: 0.12; /* Subtle opacity */
+            filter: grayscale(100%) contrast(180%);
+            mix-blend-mode: color-burn; /* Creates the dark etched ink look */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Individual Page Sections (Now Flush) */
         .page {
-            width: 90%;
-            max-width: 440px;
-            min-height: 80vh; /* Takes up most of the screen */
-            background: #fffdf8;
-            padding: 50px 35px;
-            box-shadow: 0 20px 50px rgba(39, 64, 41, 0.15);
-            border: 1px solid var(--accent-gold);
+            width: 100%;
+            min-height: 80vh; 
+            padding: 60px 40px;
             text-align: center;
             position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border-radius: 6px;
-            overflow: hidden;
+            z-index: 10;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2); /* Subtle divider */
         }
 
-        /* Card Peony Corners */
-        .page::before, .page::after {
-            content: '';
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            background-image: url('https://images.unsplash.com/photo-1455382223748-18e5968d0e51?q=80&w=400&auto=format&fit=crop');
-            background-size: cover;
-            opacity: 0.08;
-            filter: grayscale(100%) sepia(80%) hue-rotate(70deg);
-            z-index: 0;
-            border-radius: 50%;
-        }
-        
-        .page::before { top: -100px; left: -100px; }
-        .page::after { bottom: -100px; right: -100px; }
-
-        .card-content {
-            position: relative;
-            z-index: 10; /* Keeps text above the floral corners */
-            width: 100%;
+        .page:last-child {
+            border-bottom: none;
         }
 
+        /* Typography with Engraved/Letterpress Effect */
         .bismillah {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: var(--deep-green);
             margin-bottom: 30px;
+            text-shadow: var(--engraved-shadow);
         }
 
         .names {
@@ -193,12 +176,14 @@
             margin: 25px 0;
             font-weight: 500;
             line-height: 1.1;
+            text-shadow: var(--engraved-shadow);
         }
 
         .ampersand {
             font-style: italic;
             color: var(--accent-gold);
             font-size: 2rem;
+            text-shadow: var(--engraved-shadow);
         }
 
         .details-text {
@@ -207,15 +192,17 @@
             line-height: 1.8;
             color: #4a544c;
             margin-bottom: 25px;
+            text-shadow: var(--engraved-shadow);
         }
 
         .event-box {
-            background: rgba(249, 248, 244, 0.8);
+            background: rgba(255, 255, 255, 0.6);
             padding: 25px 20px;
             margin-top: 20px;
             border-left: 3px solid var(--accent-gold);
             text-align: left;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(2px);
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05); /* Debossed box effect */
         }
 
         .event-box h3 {
@@ -225,19 +212,20 @@
             margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 2px;
+            text-shadow: var(--engraved-shadow);
         }
 
         .event-box p {
             font-family: 'Montserrat', sans-serif;
             font-size: 0.9rem;
-            color: #555;
+            color: #444;
             line-height: 1.6;
         }
 
         .rsvp-btn {
             background: var(--deep-green);
             color: #fff;
-            border: none;
+            border: 1px solid #1a2a1b;
             padding: 15px 35px;
             font-family: 'Montserrat', sans-serif;
             font-size: 0.9rem;
@@ -245,12 +233,14 @@
             text-transform: uppercase;
             cursor: pointer;
             margin-top: 25px;
-            transition: background 0.4s ease, transform 0.2s ease;
+            transition: background 0.4s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: inset 1px 1px 2px rgba(255,255,255,0.2), 2px 2px 5px rgba(0,0,0,0.2);
         }
 
         .rsvp-btn:hover {
             background: var(--sage-green);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
+            box-shadow: inset 1px 1px 2px rgba(255,255,255,0.2), 3px 4px 8px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -263,27 +253,28 @@
             <div class="wax-seal">
                 <span>N & S</span>
             </div>
-            <div class="scroll-instruction">Scroll Down</div>
         </div>
     </div>
 
     <!-- Cards Scroll Track -->
     <div class="content-scroll-layer">
         
-        <!-- Page 1: Welcome & Intro -->
-        <div class="page">
-            <div class="card-content">
+        <!-- The Seamless Continuous Card -->
+        <div class="continuous-card">
+            <!-- Engraved Floral Overlay for the whole card -->
+            <div class="engraved-floral"></div>
+
+            <!-- Page 1: Welcome & Intro -->
+            <div class="page">
                 <div class="bismillah">﷽</div>
                 <p class="details-text">Mr. Noorani & Mrs. Nareeman Edoo<br>request your presence on the occasion of the wedding of their beloved daughter</p>
                 <h1 class="names">Noor E Nasseebah <br><span class="ampersand">to</span> <br>Mohammad Shahbaz</h1>
                 <p class="details-text" style="margin-top: 20px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Atawoo Family</p>
             </div>
-        </div>
 
-        <!-- Page 2: Venue & Schedule -->
-        <div class="page">
-            <div class="card-content">
-                <h2 style="font-family: 'Montserrat'; font-size: 1.2rem; color: var(--deep-green); letter-spacing: 3px; margin-bottom: 20px;">PROGRAMME</h2>
+            <!-- Page 2: Venue & Schedule -->
+            <div class="page">
+                <h2 style="font-family: 'Montserrat'; font-size: 1.2rem; color: var(--deep-green); letter-spacing: 3px; margin-bottom: 20px; text-shadow: var(--engraved-shadow);">PROGRAMME</h2>
                 
                 <div class="event-box">
                     <h3>Nikah Ceremony</h3>
@@ -297,17 +288,15 @@
                     <p>Dinner will be served on that occasion as from 19:00 hrs</p>
                 </div>
             </div>
-        </div>
 
-        <!-- Page 3: Duas & RSVP -->
-        <div class="page">
-            <div class="card-content">
+            <!-- Page 3: Duas & RSVP -->
+            <div class="page">
                 <p class="details-text" style="font-style: italic; font-size: 1.1rem; line-height: 2;">
                     "Your duas & esteemed presence will be highly appreciated."
                 </p>
-                <div style="width: 50px; height: 1px; background: var(--accent-gold); margin: 30px auto;"></div>
+                <div style="width: 50px; height: 1px; background: rgba(197, 160, 89, 0.5); margin: 30px auto; box-shadow: var(--engraved-shadow);"></div>
                 <p class="details-text" style="margin-bottom: 10px;">With best compliments from</p>
-                <p style="font-weight: 600; color: var(--deep-green); letter-spacing: 2px; font-size: 1.2rem; font-family: 'Montserrat', sans-serif;">Edoo Family</p>
+                <p style="font-weight: 600; color: var(--deep-green); letter-spacing: 2px; font-size: 1.2rem; font-family: 'Montserrat', sans-serif; text-shadow: var(--engraved-shadow);">Edoo Family</p>
                 
                 <button class="rsvp-btn" onclick="alert('Thank you! Your response has been noted.')">Confirm Attendance</button>
             </div>
@@ -316,7 +305,6 @@
     </div>
 
     <script>
-        // Calculate dynamic scroll values on resize
         let maxScroll, vh;
         function calculateHeights() {
             maxScroll = document.body.scrollHeight - window.innerHeight;
@@ -324,40 +312,37 @@
         }
         
         window.addEventListener('resize', calculateHeights);
+        // Add a slight delay on load to ensure fonts/images render before height check
+        window.addEventListener('load', calculateHeights);
         calculateHeights();
 
-        // Main Scroll Animation Logic
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
             let envProgress = 0;
             
-            // Phase 1: Opening the envelope (Top of the page)
+            // Open envelope
             if (scrollY < vh) {
                 envProgress = scrollY / vh;
             } 
-            // Phase 3: Closing the envelope (Bottom of the page)
+            // Close envelope
             else if (scrollY > maxScroll - vh) {
                 envProgress = (maxScroll - scrollY) / vh;
             } 
-            // Phase 2: Envelope is open, cards are scrolling past
+            // Reading content
             else {
                 envProgress = 1;
             }
 
-            // Clamp progress between 0 and 1
             envProgress = Math.max(0, Math.min(envProgress, 1));
 
-            // Apply transforms based on progress
             const envelope = document.getElementById('envelope');
             
-            // Scale grows up to 1.8x, opacity fades non-linearly for smoothness
             const envScale = 1 + (envProgress * 0.8); 
             const envOpacity = 1 - Math.pow(envProgress, 1.5);
             
             envelope.style.transform = `scale(${envScale})`;
             envelope.style.opacity = envOpacity;
             
-            // Disable clicks on the envelope when it's open so the user can interact with the cards
             if (envProgress > 0.3) {
                 envelope.style.pointerEvents = 'none';
             } else {
