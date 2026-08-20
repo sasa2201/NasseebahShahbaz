@@ -7,10 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f7f5f0;
+            --bg-color: #f4f1e8;
             --deep-green: #274029;
             --sage-green: #4a6b4d;
-            --envelope-green: #314d34;
+            --envelope-green: #1d3320;
             --accent-gold: #c5a059;
             --text-dark: #2c352d;
         }
@@ -25,12 +25,11 @@
             background-color: var(--bg-color);
             font-family: 'Cormorant Garamond', serif;
             color: var(--text-dark);
-            height: 250vh; /* Creates scroll height */
-            overflow-x: hidden;
+            /* Let the internal content dictate the scroll height */
         }
 
-        /* Fixed container for scroll effects */
-        .scroll-container {
+        /* Fixed layer for the envelope */
+        .fixed-envelope-container {
             position: fixed;
             top: 0;
             left: 0;
@@ -39,72 +38,86 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            z-index: 100;
+            pointer-events: none; /* Allows scrolling on the body behind it */
         }
 
-        /* Envelope Screen */
+        /* Envelope Design */
         .envelope-wrapper {
-            position: absolute;
+            position: relative;
             width: 100%;
-            max-width: 420px;
-            height: 700px;
-            background: var(--envelope-green);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-width: 450px;
+            height: 750px;
+            background-color: var(--envelope-green);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.8);
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 4px;
             overflow: hidden;
-            background-image: radial-gradient(circle, rgba(255,255,255,0.05) 10%, transparent 10%);
-            background-size: 20px 20px;
-            z-index: 10;
+            pointer-events: auto; /* Catch clicks if needed */
             will-change: transform, opacity;
         }
 
-        /* Peony Pattern Overlay */
+        /* Heavy Peony Floral Texture Overlay */
         .peony-bg {
             position: absolute;
-            inset: 0;
-            opacity: 0.15;
-            background-image: url('https://images.unsplash.com/photo-1611605469961-50d1e409622a?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            inset: -20px;
+            background-image: url('https://images.unsplash.com/photo-1455382223748-18e5968d0e51?q=80&w=800&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            mix-blend-mode: overlay;
+            /* Tinting the peonies deep green to mimic embossed wax/paper */
+            filter: grayscale(100%) sepia(50%) hue-rotate(70deg) contrast(1.5) brightness(0.7);
+            mix-blend-mode: screen;
+            opacity: 0.45;
+        }
+
+        /* Inner shadow to mimic the envelope folds */
+        .envelope-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(to bottom right, rgba(255,255,255,0.05) 0%, transparent 40%),
+                linear-gradient(to top left, rgba(0,0,0,0.4) 0%, transparent 40%);
+            z-index: 2;
         }
 
         /* Wax Seal */
         .wax-seal {
             position: relative;
-            width: 90px;
-            height: 90px;
+            width: 95px;
+            height: 95px;
             background: linear-gradient(135deg, #d4af37, #aa7c11);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.4);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.5);
             border: 3px solid #99710f;
+            z-index: 10;
         }
 
         .wax-seal span {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 500;
             color: #fff;
             letter-spacing: 2px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
         .scroll-instruction {
             position: absolute;
             bottom: 40px;
-            color: #d4af37;
+            color: #e6d3a3;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.85rem;
-            letter-spacing: 3px;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
             text-transform: uppercase;
             text-align: center;
             width: 100%;
+            z-index: 10;
             animation: bounce 2s infinite;
         }
 
@@ -114,139 +127,163 @@
             60% { transform: translateY(-4px); }
         }
 
-        /* Invitation Container (Pages) */
-        .invitation-container {
-            position: absolute;
-            width: 100%;
-            max-width: 480px;
-            height: 100vh;
+        /* Scrolling Content Layer */
+        .content-scroll-layer {
+            position: relative;
+            z-index: 50; /* Sits under the closed envelope, revealed when it fades */
+            padding-top: 150vh; /* Space to scroll BEFORE the first card appears */
+            padding-bottom: 150vh; /* Space to scroll AFTER the last card to trigger the close animation */
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
-            overflow-y: auto;
-            opacity: 0;
-            transform: scale(0.9);
-            will-change: transform, opacity;
+            gap: 40vh; /* Large gap ensures only one card is seen at a time */
         }
 
+        /* Individual Card Aesthetics */
         .page {
-            width: 100%;
-            max-width: 420px;
-            background: #fff;
-            padding: 40px 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(39, 64, 41, 0.08);
-            border: 1px solid #e6dec9;
+            width: 90%;
+            max-width: 440px;
+            min-height: 80vh; /* Takes up most of the screen */
+            background: #fffdf8;
+            padding: 50px 35px;
+            box-shadow: 0 20px 50px rgba(39, 64, 41, 0.15);
+            border: 1px solid var(--accent-gold);
             text-align: center;
             position: relative;
-            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        /* Card Peony Corners */
+        .page::before, .page::after {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background-image: url('https://images.unsplash.com/photo-1455382223748-18e5968d0e51?q=80&w=400&auto=format&fit=crop');
+            background-size: cover;
+            opacity: 0.08;
+            filter: grayscale(100%) sepia(80%) hue-rotate(70deg);
+            z-index: 0;
+            border-radius: 50%;
+        }
+        
+        .page::before { top: -100px; left: -100px; }
+        .page::after { bottom: -100px; right: -100px; }
+
+        .card-content {
+            position: relative;
+            z-index: 10; /* Keeps text above the floral corners */
+            width: 100%;
         }
 
         .bismillah {
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: var(--deep-green);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .names {
-            font-size: 2.2rem;
+            font-size: 2.8rem;
             color: var(--deep-green);
-            margin: 15px 0;
+            margin: 25px 0;
             font-weight: 500;
+            line-height: 1.1;
         }
 
         .ampersand {
             font-style: italic;
             color: var(--accent-gold);
-            font-size: 1.6rem;
+            font-size: 2rem;
         }
 
         .details-text {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #4a544c;
+            margin-bottom: 25px;
         }
 
         .event-box {
-            background: #f9f8f4;
-            padding: 20px;
-            margin-top: 15px;
+            background: rgba(249, 248, 244, 0.8);
+            padding: 25px 20px;
+            margin-top: 20px;
             border-left: 3px solid var(--accent-gold);
             text-align: left;
+            backdrop-filter: blur(5px);
         }
 
         .event-box h3 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--deep-green);
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
         .event-box p {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.85rem;
-            color: #666;
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.6;
         }
-
-        .floral-corner {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            opacity: 0.6;
-        }
-        .top-left { top: 10px; left: 10px; border-top: 2px solid var(--sage-green); border-left: 2px solid var(--sage-green); }
-        .bottom-right { bottom: 10px; right: 10px; border-bottom: 2px solid var(--sage-green); border-right: 2px solid var(--sage-green); }
 
         .rsvp-btn {
             background: var(--deep-green);
             color: #fff;
             border: none;
-            padding: 12px 30px;
+            padding: 15px 35px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             cursor: pointer;
-            margin-top: 15px;
-            transition: background 0.3s ease;
+            margin-top: 25px;
+            transition: background 0.4s ease, transform 0.2s ease;
         }
 
         .rsvp-btn:hover {
             background: var(--sage-green);
+            transform: translateY(-3px);
         }
     </style>
 </head>
 <body>
 
-    <div class="scroll-container">
-        <!-- Envelope Screen -->
+    <!-- Fixed Envelope Layer -->
+    <div class="fixed-envelope-container">
         <div class="envelope-wrapper" id="envelope">
             <div class="peony-bg"></div>
             <div class="wax-seal">
                 <span>N & S</span>
             </div>
-            <div class="scroll-instruction">Scroll Down to Open</div>
+            <div class="scroll-instruction">Scroll Down</div>
+        </div>
+    </div>
+
+    <!-- Cards Scroll Track -->
+    <div class="content-scroll-layer">
+        
+        <!-- Page 1: Welcome & Intro -->
+        <div class="page">
+            <div class="card-content">
+                <div class="bismillah">﷽</div>
+                <p class="details-text">Mr. Noorani & Mrs. Nareeman Edoo<br>request your presence on the occasion of the wedding of their beloved daughter</p>
+                <h1 class="names">Noor E Nasseebah <br><span class="ampersand">to</span> <br>Mohammad Shahbaz</h1>
+                <p class="details-text" style="margin-top: 20px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;">Atawoo Family</p>
+            </div>
         </div>
 
-        <!-- Website Invitation Pages -->
-        <div class="invitation-container" id="invitation">
-            <!-- Page 1: Welcome & Intro -->
-            <div class="page">
-                <div class="floral-corner top-left"></div>
-                <div class="bismillah">﷽</div>
-                <p class="details-text">Mr. & Mrs. Edoo request your presence on the occasion of the wedding of their beloved children</p>
-                <h1 class="names">Nasseebah <br><span class="ampersand">&</span> <br>Shahbaz</h1>
-                <div class="floral-corner bottom-right"></div>
-            </div>
-
-            <!-- Page 2: Venue & Schedule -->
-            <div class="page">
-                <h2 style="font-family: 'Montserrat'; font-size: 1.1rem; color: var(--deep-green); letter-spacing: 2px; margin-bottom: 15px;">PROGRAMME</h2>
+        <!-- Page 2: Venue & Schedule -->
+        <div class="page">
+            <div class="card-content">
+                <h2 style="font-family: 'Montserrat'; font-size: 1.2rem; color: var(--deep-green); letter-spacing: 3px; margin-bottom: 20px;">PROGRAMME</h2>
                 
                 <div class="event-box">
                     <h3>Nikah Ceremony</h3>
@@ -260,47 +297,71 @@
                     <p>Dinner will be served on that occasion as from 19:00 hrs</p>
                 </div>
             </div>
+        </div>
 
-            <!-- Page 3: Duas & RSVP -->
-            <div class="page">
-                <p class="details-text" style="font-style: italic;">
+        <!-- Page 3: Duas & RSVP -->
+        <div class="page">
+            <div class="card-content">
+                <p class="details-text" style="font-style: italic; font-size: 1.1rem; line-height: 2;">
                     "Your duas & esteemed presence will be highly appreciated."
                 </p>
-                <p class="details-text" style="margin-bottom: 5px;">With best compliments from</p>
-                <p style="font-weight: 600; color: var(--deep-green); letter-spacing: 1px;">Edoo Family</p>
+                <div style="width: 50px; height: 1px; background: var(--accent-gold); margin: 30px auto;"></div>
+                <p class="details-text" style="margin-bottom: 10px;">With best compliments from</p>
+                <p style="font-weight: 600; color: var(--deep-green); letter-spacing: 2px; font-size: 1.2rem; font-family: 'Montserrat', sans-serif;">Edoo Family</p>
                 
                 <button class="rsvp-btn" onclick="alert('Thank you! Your response has been noted.')">Confirm Attendance</button>
             </div>
         </div>
+
     </div>
 
     <script>
+        // Calculate dynamic scroll values on resize
+        let maxScroll, vh;
+        function calculateHeights() {
+            maxScroll = document.body.scrollHeight - window.innerHeight;
+            vh = window.innerHeight;
+        }
+        
+        window.addEventListener('resize', calculateHeights);
+        calculateHeights();
+
+        // Main Scroll Animation Logic
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
-            const maxScroll = window.innerHeight; // Scroll range to trigger fully
-            const progress = Math.min(scrollY / maxScroll, 1);
+            let envProgress = 0;
+            
+            // Phase 1: Opening the envelope (Top of the page)
+            if (scrollY < vh) {
+                envProgress = scrollY / vh;
+            } 
+            // Phase 3: Closing the envelope (Bottom of the page)
+            else if (scrollY > maxScroll - vh) {
+                envProgress = (maxScroll - scrollY) / vh;
+            } 
+            // Phase 2: Envelope is open, cards are scrolling past
+            else {
+                envProgress = 1;
+            }
 
+            // Clamp progress between 0 and 1
+            envProgress = Math.max(0, Math.min(envProgress, 1));
+
+            // Apply transforms based on progress
             const envelope = document.getElementById('envelope');
-            const invitation = document.getElementById('invitation');
-
-            // Envelope animation on scroll
-            envelope.style.transform = `scale(${1 + progress * 0.5})`;
-            envelope.style.opacity = `${1 - progress * 1.2}`;
-
-            if (progress >= 0.8) {
+            
+            // Scale grows up to 1.8x, opacity fades non-linearly for smoothness
+            const envScale = 1 + (envProgress * 0.8); 
+            const envOpacity = 1 - Math.pow(envProgress, 1.5);
+            
+            envelope.style.transform = `scale(${envScale})`;
+            envelope.style.opacity = envOpacity;
+            
+            // Disable clicks on the envelope when it's open so the user can interact with the cards
+            if (envProgress > 0.3) {
                 envelope.style.pointerEvents = 'none';
             } else {
                 envelope.style.pointerEvents = 'auto';
-            }
-
-            // Invitation pages animation on scroll
-            invitation.style.opacity = `${Math.max(0, (progress - 0.2) * 1.25)}`;
-            invitation.style.transform = `scale(${0.9 + progress * 0.1})`;
-            
-            if (progress > 0.5) {
-                invitation.style.pointerEvents = 'auto';
-            } else {
-                invitation.style.pointerEvents = 'none';
             }
         });
     </script>
